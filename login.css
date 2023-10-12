@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #1e1e1e ;
+    color: white;
+}
+#login-form {
+    margin: 100px auto;
+    width: 300px;
+    text-align: center;
+}
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+}
+input[type="submit"] {
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
+    border-radius: 5px;
+    text-align: center;
+}
