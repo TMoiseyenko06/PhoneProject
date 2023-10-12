@@ -3,31 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="per.css">
-    <title>Home</title>
-    
-<link >
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #matrix-container {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+        .circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid #000;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<div class="header">
-    <img id="logo" src="https://www.neshaminy.org/cms/lib/PA01000466/Centricity/Template/GlobalAssets/images///logos/web-150h-DISTRICT.png">
-    <nav>
-        <ul>
-            <li><a href="login.html">Logout</a></li>
-
-        </ul>
-    </nav>
-</div>
 <body>
-    <div id="chart-div">
-        <input type="text" id="student-input" placeholder="Enter student name">
-        <button id="change-color-button">Change Color</button>
-        <div id="matrix-container">
-            <button class="but">Hi</button>
-            <div id="student-name">John</div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-        </div>
+    <h1>Student Matrix</h1>
+    <div id="matrix-container">
+        <div class="clickable-name">Student 1</div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        
+        <div class="clickable-name">Student 2</div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        
+        <div class="clickable-name">Student 3</div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
-    <script src="1.js"></script>
+    <button id="save-button">Save</button>
+    <script>
+    <script>
+        const clickableNames = document.querySelectorAll('.clickable-name');
+        const circles = document.querySelectorAll('.circle');
+        let currentIndex = 0;
+        const htmlFileName = '1'; // Change this for each HTML file
+
+        // Function to save the circle states to the server
+        function saveCircleStates() {
+            const stateData = Array.from(circles, circle => circle.style.backgroundColor === 'red');
+            fetch(`/save/${htmlFileName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(stateData),
+            })
+                .then(response => response.text())
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+        }
+
+        // Function to load the circle states from the server
+        function loadCircleStates() {
+            fetch(`/read/${htmlFileName}`)
+                .then(response => response.json())
+                .then(data => {
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i]) {
+                            circles[i].style.backgroundColor = 'red';
+                        }
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Load saved circle states when the page loads
+        loadCircleStates();
+
+        clickableNames.forEach((name, index) => {
+            name.addEventListener('click', () => {
+                if (circles[currentIndex].style.backgroundColor !== 'red') {
+                    circles[currentIndex].style.backgroundColor = 'red';
+                    currentIndex++;
+                }
+            });
+        });
+
+        // Add a click event listener to the "Save" button
+        const saveButton = document.getElementById('save-button');
+        saveButton.addEventListener('click', saveCircleStates);
+    </script>
+    </script>
 </body>
+</html>
